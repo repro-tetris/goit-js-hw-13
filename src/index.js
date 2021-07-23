@@ -44,7 +44,7 @@ async function loadMoreListener(e) {
       .firstElementChild.getBoundingClientRect();
 
     window.scrollBy({
-      top: cardHeight * 2,
+      top: cardHeight,
       behavior: 'smooth',
     });
     lightbox.refresh();
