@@ -4,11 +4,12 @@ import { refs } from './js/refs';
 import { SearchEngine } from './js/searchEngine';
 import imageCardTml from './templates/photoCardTpl.hbs';
 import notiflix from 'notiflix';
+import SimpleLightbox from 'simplelightbox';
 
 let remainDownloadCards = null;
 
 const searchEngine = new SearchEngine(env.baseUrl);
-
+const lightbox = new SimpleLightbox('.gallery a');
 refs.searchBtn.addEventListener('click', searchBtnListener);
 refs.loadMoreBnt.addEventListener('click', loadMoreListener);
 
@@ -27,6 +28,7 @@ async function searchBtnListener(e) {
     remainDownloadCards = data.totalHits - data.hits.length;
     notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
     refs.galleryEl.innerHTML = imageCardTml(data.hits);
+    lightbox.refresh();
     hideLoadMoreBntIfDone();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -36,8 +38,16 @@ async function loadMoreListener(e) {
   try {
     const data = await (await searchEngine.getNext()).data;
     remainDownloadCards -= data.hits.length;
-
     refs.galleryEl.insertAdjacentHTML('beforeend', imageCardTml(data.hits));
+    const { height: cardHeight } = document
+      .querySelector('.gallery')
+      .firstElementChild.getBoundingClientRect();
+
+    window.scrollBy({
+      top: cardHeight * 2,
+      behavior: 'smooth',
+    });
+    lightbox.refresh();
   } catch (error) {
     notiflix.Notify.failure(error.message);
   } finally {

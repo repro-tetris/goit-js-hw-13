@@ -3,6 +3,17 @@
   flex-wrap: wrap;
   justify-content: space-around;
 }
+
+.original-img-url {
+  &:hover,
+  &:visited,
+  &:link,
+  &:active {
+    color: black;
+    text-decoration: none;
+  }
+}
+
 .photo-card {
   //flex-basis: auto;
   margin: 10px;
