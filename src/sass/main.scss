@@ -1,0 +1,10 @@
+/*
+ * Главный файл стилей.
+ * Все паршалы подключаются сюда.
+ */
+
+// Стили для файла с примером HTML-фрагмента
+@import '../../node_modules/modern-normalize/modern-normalize.css';
+@import './common';
+@import './search-form';
+@import './gallery-content';

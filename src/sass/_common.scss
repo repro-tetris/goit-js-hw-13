@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.btn-load-more {
+  align-self: center;
+  text-align: center;
+  background-color: blue;
+  color: cornsilk;
+  padding: 10px;
+  border: 0px;
+  width: 300px;
+  margin-top: 10px;
+  border-radius: 5px;
+  visibility: hidden;
+}

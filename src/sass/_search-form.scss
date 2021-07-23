@@ -1,0 +1,22 @@
+.header {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  background-color: blue;
+}
+
+.header + .gallery {
+  padding-top: 50px;
+}
+
+.search-form {
+  position: relative;
+}
+.search-form input {
+  height: 36px;
+  border-radius: 5px;
+}
