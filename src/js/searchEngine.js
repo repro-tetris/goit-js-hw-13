@@ -24,15 +24,15 @@ export class SearchEngine {
   async get(searchStr) {
     this.curPage = PAGE_DEFAULT;
     this.searchStr = searchStr;
-    return await axios.get(this.buildUrl());
+    return await axios.get(this.#buildUrl());
   }
 
-  buildUrl() {
+  #buildUrl() {
     return `${this.#baseUrl}${this.searchStr}&page=${this.curPage}&per_page=${this.perPage}`;
   }
 
   async getNext() {
     this.curPage++;
-    return await axios.get(this.buildUrl());
+    return await axios.get(this.#buildUrl());
   }
 }
