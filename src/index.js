@@ -17,20 +17,25 @@ async function searchBtnListener(e) {
   e.preventDefault();
 
   hideLoadMoreBtn();
+  try {
+    const data = await (await searchEngine.get(refs.searchInput.value)).data;
 
-  const data = await (await searchEngine.get(refs.searchInput.value)).data;
+    if (data.hits.length === 0) {
+      showMessage(
+        env.messageType.ERROR,
+        'Sorry, there are no images matching your search query. Please try again.',
+      );
+    } else {
+      remainDownloadCards = data.totalHits - data.hits.length;
+      showMessage(env.messageType.SUCCESS, `Hooray! We found ${data.totalHits} images.`);
 
-  if (data.hits.length === 0) {
-    notiflix.Notify.failure(
-      'Sorry, there are no images matching your search query. Please try again.',
-    );
-  } else {
-    remainDownloadCards = data.totalHits - data.hits.length;
-    notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
-    refs.galleryEl.innerHTML = imageCardTml(data.hits);
-    lightbox.refresh();
-    hideLoadMoreBntIfDone();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+      refs.galleryEl.innerHTML = imageCardTml(data.hits);
+      lightbox.refresh();
+      hideLoadMoreBntIfDone();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  } catch (error) {
+    showMessage(env.messageType.ERROR, error.message);
   }
 }
 
@@ -49,7 +54,7 @@ async function loadMoreListener(e) {
     });
     lightbox.refresh();
   } catch (error) {
-    notiflix.Notify.failure(error.message);
+    showMessage(env.messageType.ERROR, error.message);
   } finally {
     hideLoadMoreBntIfDone();
   }
@@ -58,7 +63,10 @@ async function loadMoreListener(e) {
 function hideLoadMoreBntIfDone() {
   if (remainDownloadCards === 0) {
     hideLoadMoreBtn();
-    notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
+    showMessage(
+      env.messageType.WARNING,
+      "We're sorry, but you've reached the end of search results.",
+    );
   } else {
     hideLoadMoreBtn(false);
   }
@@ -66,4 +74,8 @@ function hideLoadMoreBntIfDone() {
 
 function hideLoadMoreBtn(hide = true) {
   refs.loadMoreBnt.style.visibility = hide ? 'hidden' : 'visible';
+}
+
+function showMessage(messageType, message) {
+  notiflix.Notify[messageType](message);
 }
